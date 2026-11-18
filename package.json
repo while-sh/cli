@@ -1,0 +1,27 @@
+{
+  "name": "while-sh",
+  "version": "0.1.0",
+  "description": "wh dev : le serveur de dev de votre poste sous une adresse de while, ouverte aux membres de votre organisation.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "wh": "bin/wh.mjs"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "homepage": "https://while.sh/docs",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/while-sh/cli.git"
+  }
+}

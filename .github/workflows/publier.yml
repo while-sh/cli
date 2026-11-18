@@ -1,0 +1,32 @@
+# La publication de while-sh sur npm, avec la provenance (Sigstore) : sur une étiquette cli-v<version> du miroir
+# github.com/while-sh/cli (le dossier cli/ du dépôt de while, recopié par scripts/miroir-cli.mjs). L'étiquette doit être
+# la version du paquet. Les actions sont épinglées par commit ; NPM_TOKEN est un jeton granular qui ne publie que
+# while-sh. Les sommes SHA-256 du paquet publié vont au résumé du job (while.sh les reprend).
+name: Publier sur npm
+on:
+  push:
+    tags: ['cli-v*']
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  publier:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - name: L'étiquette est la version du paquet
+        run: test "cli-v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
+      - name: Le client démarre (sans dépendance)
+        run: node bin/wh.mjs --version && node bin/wh.mjs --help > /dev/null
+      - name: Publier, avec la provenance
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Les sommes SHA-256
+        run: |
+          npm pack --silent
+          { echo '```'; sha256sum ./*.tgz; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
