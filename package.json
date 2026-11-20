@@ -1,6 +1,6 @@
 {
   "name": "while-sh",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "wh dev : le serveur de dev de votre poste sous une adresse de while, ouverte aux membres de votre organisation.",
   "license": "Apache-2.0",
   "type": "module",
